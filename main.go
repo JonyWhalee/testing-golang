@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 
@@ -36,11 +39,20 @@ func main() {
 
 		remainingCharacters = remainingCharacters - userCharacter
 
-		buyers = append(buyers, userName, " ", userLastname)
-
 		fmt.Printf("Thanks u %v %v for buy %v characters. You will receive a confirmation email at %v \n", userName, userLastname, userCharacter, userEmail)
 		fmt.Printf("Now we have %v characters remaining for %v \n", remainingCharacters, siteName)
 
+		buyers = append(buyers, userName)
+
+		firstNames := []string{}
+		// _ or blank identifier
+		for _, buyer := range buyers {
+			// Fields separates the elements with blank space
+			var names = strings.Fields(buyer)
+			firstNames = append(firstNames, names[0])
+
+		}
+		fmt.Printf("The first names of buyers are: %v \n", firstNames)
 	}
 
 }
