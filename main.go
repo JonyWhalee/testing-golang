@@ -34,25 +34,52 @@ func main() {
 		fmt.Println("Enter ur Age:")
 		fmt.Scan(&userAge)
 
+		if userAge <= 17 {
+			fmt.Println("You need to be over 18 years old")
+			continue
+		}
+
 		fmt.Println("Enter amount of character you want:")
 		fmt.Scan(&userCharacter)
 
-		remainingCharacters = remainingCharacters - userCharacter
+		isValidName := len(userName) >= 2 && len(userLastname) >= 2
+		isValidEmail := strings.Contains(userEmail, "@")
+		isValidCharacterNumber := userCharacter > 0 && userCharacter <= remainingCharacters
 
-		fmt.Printf("Thanks u %v %v for buy %v characters. You will receive a confirmation email at %v \n", userName, userLastname, userCharacter, userEmail)
-		fmt.Printf("Now we have %v characters remaining for %v \n", remainingCharacters, siteName)
+		if isValidName && isValidEmail && isValidCharacterNumber {
+			remainingCharacters = remainingCharacters - userCharacter
 
-		buyers = append(buyers, userName)
+			fmt.Printf("Thanks u %v %v for buy %v characters. You will receive a confirmation email at %v \n", userName, userLastname, userCharacter, userEmail)
+			fmt.Printf("Now we have %v characters remaining for %v \n", remainingCharacters, siteName)
 
-		firstNames := []string{}
-		// _ or blank identifier
-		for _, buyer := range buyers {
-			// Fields separates the elements with blank space
-			var names = strings.Fields(buyer)
-			firstNames = append(firstNames, names[0])
+			buyers = append(buyers, userName)
 
+			firstNames := []string{}
+			// _ or blank identifier
+			for _, buyer := range buyers {
+				// Fields separates the elements with blank space
+				var names = strings.Fields(buyer)
+				firstNames = append(firstNames, names[0])
+
+			}
+			fmt.Printf("The first names of buyers are: %v \n", firstNames)
+
+			if remainingCharacters == 0 {
+				fmt.Println("We dont have any more character. Come back in other time")
+				break
+			}
+		} else {
+			if !isValidName {
+				fmt.Println("First name or last name you entered is too short")
+			}
+			if !isValidEmail {
+				fmt.Println("Email address you entered doesn't contain @ sign")
+			}
+			if !isValidCharacterNumber {
+				fmt.Println("Character number you entered is invalid")
+			}
 		}
-		fmt.Printf("The first names of buyers are: %v \n", firstNames)
+
 	}
 
 }
