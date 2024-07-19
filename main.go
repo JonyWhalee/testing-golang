@@ -5,48 +5,25 @@ import (
 	"strings"
 )
 
+// package level variables
+
+const conferenceCharacters int = 20
+
+var siteName = "SuperCharacters"
+var remainingCharacters uint = 20
+var buyers = []string{}
+
 func main() {
 
-	siteName := "SuperCharacters"
-	const conferenceCharacters int = 20
-	var remainingCharacters uint = 20
-	buyers := []string{}
-
-	fmt.Println("Welcome to", siteName)
-	fmt.Printf("We have total of %v character and %v are still available.\n", conferenceCharacters, remainingCharacters)
+	greetUsers()
 
 	for {
-		var userName string
-		var userLastname string
-		var userEmail string
-		var userAge int
-		var userCharacter uint
+		userName, userLastname, userEmail, userCharacter := getUserInput()
 
-		fmt.Println("Enter ur name:")
-		fmt.Scan(&userName)
-
-		fmt.Println("Enter ur Surname:")
-		fmt.Scan(&userLastname)
-
-		fmt.Println("Enter ur email:")
-		fmt.Scan(&userEmail)
-
-		fmt.Println("Enter ur Age:")
-		fmt.Scan(&userAge)
-
-		if userAge <= 17 {
-			fmt.Println("You need to be over 18 years old")
-			continue
-		}
-
-		fmt.Println("Enter amount of character you want:")
-		fmt.Scan(&userCharacter)
-
-		isValidName := len(userName) >= 2 && len(userLastname) >= 2
-		isValidEmail := strings.Contains(userEmail, "@")
-		isValidCharacterNumber := userCharacter > 0 && userCharacter <= remainingCharacters
+		isValidName, isValidEmail, isValidCharacterNumber := validateUserFunction(userName, userLastname, userEmail, userCharacter)
 
 		if isValidName && isValidEmail && isValidCharacterNumber {
+
 			remainingCharacters = remainingCharacters - userCharacter
 
 			fmt.Printf("Thanks u %v %v for buy %v characters. You will receive a confirmation email at %v \n", userName, userLastname, userCharacter, userEmail)
@@ -54,14 +31,8 @@ func main() {
 
 			buyers = append(buyers, userName)
 
-			firstNames := []string{}
-			// _ or blank identifier
-			for _, buyer := range buyers {
-				// Fields separates the elements with blank space
-				var names = strings.Fields(buyer)
-				firstNames = append(firstNames, names[0])
+			firstNames := getFirstNames()
 
-			}
 			fmt.Printf("The first names of buyers are: %v \n", firstNames)
 
 			if remainingCharacters == 0 {
@@ -82,4 +53,50 @@ func main() {
 
 	}
 
+}
+
+func greetUsers() {
+	fmt.Println("Welcome to", siteName)
+	fmt.Printf("We have total of %v character and %v are still available.\n", conferenceCharacters, remainingCharacters)
+}
+
+func getFirstNames() []string {
+	firstNames := []string{}
+	// _ or blank identifier
+	for _, buyer := range buyers {
+		// Fields separates the elements with blank space
+		var names = strings.Fields(buyer)
+		firstNames = append(firstNames, names[0])
+
+	}
+	return firstNames
+}
+
+func validateUserFunction(userName string, userLastname string, userEmail string, userCharacter uint) (bool, bool, bool) {
+	isValidName := len(userName) >= 2 && len(userLastname) >= 2
+	isValidEmail := strings.Contains(userEmail, "@")
+	isValidCharacterNumber := userCharacter > 0 && userCharacter <= remainingCharacters
+
+	return isValidName, isValidEmail, isValidCharacterNumber
+}
+
+func getUserInput() (string, string, string, uint) {
+	var userName string
+	var userLastname string
+	var userEmail string
+	var userCharacter uint
+
+	fmt.Println("Enter ur name:")
+	fmt.Scan(&userName)
+
+	fmt.Println("Enter ur Surname:")
+	fmt.Scan(&userLastname)
+
+	fmt.Println("Enter ur email:")
+	fmt.Scan(&userEmail)
+
+	fmt.Println("Enter amount of character you want:")
+	fmt.Scan(&userCharacter)
+
+	return userName, userLastname, userEmail, userCharacter
 }
